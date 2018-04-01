@@ -1,0 +1,47 @@
+#!/usr/bin/python3
+#	rigolrdout - Read data and screenshots from Rigol oscilloscopes
+#	Copyright (C) 2012-2018 Johannes Bauer
+#
+#	This file is part of rigolrdout.
+#
+#	rigolrdout is free software; you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation; this program is ONLY licensed under
+#	version 3 of the License, later versions are explicitly excluded.
+#
+#	rigolrdout is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#
+#	You should have received a copy of the GNU General Public License
+#	along with rigolrdout; if not, write to the Free Software
+#	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#	Johannes Bauer <JohannesBauer@gmx.de>
+
+import sys
+import os
+from FriendlyArgumentParser import FriendlyArgumentParser
+from InputFile import InputFile
+
+parser = FriendlyArgumentParser()
+parser.add_argument("-t", "--output-type", choices = [ "waveform", "hardcopy" ], default = "waveform", help = "Specify output content. Can be one of %(choices)s, defaults to %(default)s.")
+parser.add_argument("-f", "--output-format", choices = [ "gnuplot", "png" ], default = "gnuplot", help = "Specify output filetype. Can be one of %(choices)s, defaults to %(default)s.")
+parser.add_argument("-s", "--search-path", type = str, metavar = "path", help = "When searching for external references, usually the directory of the input file is looked at. This allows specifying a different directory.")
+parser.add_argument("-v", "--verbose", action = "count", default = 0, help = "Increase level of debugging verbosity.")
+parser.add_argument("inputfile", metavar = "infile", help = "The input JSON filename.")
+parser.add_argument("outputfile", metavar = "outfile", help = "The outputfilename.")
+args = parser.parse_args(sys.argv[1:])
+
+if (args.output_type == "hardcopy") and (args.output_format != "png"):
+	print("error: can only create PNGs of hardcopies.", file = sys.stderr)
+	sys.exit(1)
+	
+input_file = InputFile(args, args.inputfile)
+if args.output_type == "hardcopy":
+	input_file.write_hardcopy(args.outputfile)
+elif args.output_type == "waveform":
+	input_file.write_waveform(args.outputfile, out_format = args.output_format)
+else:
+	raise Exception(NotImplemented)

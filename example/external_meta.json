@@ -75,7 +75,7 @@
     "created": "2018-04-01T22:45:48Z",
     "data": {
         "hardcopy": {
-            "filename": "output_hardcopy.png",
+            "filename": "external_hardcopy.png",
             "format": "png",
             "length": 35409,
             "meta": {
@@ -87,7 +87,7 @@
             "storage": "external"
         },
         "waveform-ch1": {
-            "filename": "output_waveform-ch1.bin",
+            "filename": "external_waveform-ch1.bin",
             "format": "bin",
             "length": 2400000,
             "meta": {

@@ -37,7 +37,6 @@ parser.add_argument("--no-serial", action = "store_true", help = "Do not include
 parser.add_argument("-o", "--output", metavar = "file", type = str, required = True, help = "Specify output filename. Mandatory argument.")
 parser.add_argument("-v", "--verbose", action = "count", default = 0, help = "Increase level of debugging verbosity.")
 args = parser.parse_args(sys.argv[1:])
-print(args)
 
 conn = Connection.establish(args.connect)
 outfile = OutputFile(include_serial = not args.no_serial)
