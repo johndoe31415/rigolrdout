@@ -47,6 +47,8 @@ class OutputFile(object):
 	def __init__(self):
 		self._creation = datetime.datetime.utcnow()
 		self._connection = None
+		self._channel_info = None
+		self._acquisition_info = None
 		self._instrument = None
 		self._hardcopies = [ ]
 
@@ -57,6 +59,22 @@ class OutputFile(object):
 	@connection.setter
 	def connection(self, value):
 		self._connection = value
+
+	@property
+	def channel_info(self):
+		return self._channel_info
+
+	@channel_info.setter
+	def channel_info(self, value):
+		self._channel_info = value
+
+	@property
+	def acquisition_info(self):
+		return self._acquisition_info
+
+	@acquisition_info.setter
+	def acquisition_info(self, value):
+		self._acquisition_info = value
 
 	@property
 	def instrument(self):
@@ -84,6 +102,10 @@ class OutputFile(object):
 					"number_channels":		self.instrument.instrument_parameters.number_channels,
 				},
 			}
+		if self.channel_info is not None:
+			content["channel_info"] = self.channel_info
+		if self.acquisition_info is not None:
+			content["acquisition_info"] = self.acquisition_info
 		return content
 
 	def _write_json(self, filename):
