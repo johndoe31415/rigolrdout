@@ -70,7 +70,7 @@
             "vernier": false
         }
     },
-    "comment": "Example with inline format, -200us X-offset, -1.3V Y-offset",
+    "comment": "Example with external format, -200us X-offset, -1.3V Y-offset",
     "connection": "tcpip:ds1000z",
     "created": "2018-04-01T22:45:48Z",
     "data": {
