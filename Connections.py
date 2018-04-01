@@ -37,7 +37,7 @@ class BaseConnection(object):
 		if wait_response and text.endswith("?"):
 			return self.readline(timeout = timeout)
 		else:
-			time.sleep(0.1)
+			time.sleep(0.2)
 
 	def readline(self, codec = "utf-8", timeout = 1.0):
 		return self.__buffer.getline(codec = codec, timeout = timeout)

@@ -26,11 +26,20 @@ from TMCDataTypes import TMCJSONEncoder
 class OutputFile(object):
 	def __init__(self):
 		self._creation = datetime.datetime.utcnow()
+		self._comment = None
 		self._connection = None
 		self._channel_info = None
 		self._acquisition_info = None
 		self._instrument = None
 		self._raw_data = { }
+
+	@property
+	def comment(self):
+		return self._comment
+
+	@comment.setter
+	def comment(self, value):
+		self._comment = value
 
 	@property
 	def connection(self):
@@ -72,6 +81,8 @@ class OutputFile(object):
 			"created":		self._creation.strftime("%Y-%m-%dT%H:%M:%SZ"),
 			"connection":	self.connection,
 		}
+		if self.comment is not None:
+			content["comment"] = self.comment
 		if self.instrument is not None:
 			content["instrument"] = {
 				"vendor":					self.instrument.vendor,

@@ -19,6 +19,7 @@
 #
 #	Johannes Bauer <JohannesBauer@gmx.de>
 
+import time
 import collections
 from TMCDataTypes import TMCBool, TMCFloat, TMCRawData
 
@@ -144,6 +145,7 @@ class RigolDriver(object):
 			self._conn.command(":WAV:DATA?", wait_response = False)
 			data = self._conn.get_tmc_data(timeout = 5.0)
 			raw_data += data
+			time.sleep(0.1)
 
 		return TMCRawData(data = raw_data, file_format = "bin", metadata = metadata)
 

@@ -22,6 +22,7 @@
 import json
 import base64
 import hashlib
+import gzip
 
 class TMCBool(object):
 	_FALSE_VALUES = set([ "0", "off" ])
@@ -83,7 +84,7 @@ class TMCRawData(object):
 			"sha256":	hashlib.sha256(self._data).hexdigest(),
 		}
 		if external_filename is None:
-			result["data"] = base64.b64encode(self._data).decode("ascii")
+			result["gzip_compressed_data"] = base64.b64encode(gzip.compress(self._data)).decode("ascii")
 			result["storage"] = "inline"
 		else:
 			result["filename"] = external_filename
