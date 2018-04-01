@@ -111,13 +111,14 @@ class RigolDriver(object):
 		assert(len(preamble) == 10)
 
 		metadata = {
+			"type":		"waveform",
 			"channel":	channel_id,
 			"format":	{
 				0:	"BYTE",
 				1:	"WORD",
 				2:	"ASC",
 			}[int(preamble[0])],
-			"type":	{
+			"waveform_type": {
 				0:	"NORM",
 				1:	"MAX",
 				2:	"RAW",
@@ -166,4 +167,5 @@ class RigolDriver(object):
 		return TMCRawData(data = self._conn.get_tmc_data(timeout = 5.0), file_format = img_format, metadata = {
 			"color":	True,
 			"invert":	False,
+			"type":		"hardcopy",
 		})
