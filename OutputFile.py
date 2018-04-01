@@ -19,12 +19,13 @@
 #
 #	Johannes Bauer <JohannesBauer@gmx.de>
 
+import os
 import datetime
 import json
 from TMCDataTypes import TMCJSONEncoder
 
 class OutputFile(object):
-	def __init__(self):
+	def __init__(self, include_serial = True):
 		self._creation = datetime.datetime.utcnow()
 		self._comment = None
 		self._connection = None
@@ -32,6 +33,7 @@ class OutputFile(object):
 		self._acquisition_info = None
 		self._instrument = None
 		self._raw_data = { }
+		self._include_serial = include_serial
 
 	@property
 	def comment(self):
@@ -87,12 +89,13 @@ class OutputFile(object):
 			content["instrument"] = {
 				"vendor":					self.instrument.vendor,
 				"device":					self.instrument.device,
-				"serial":					self.instrument.serial,
 				"fw_version":				self.instrument.fw_version,
 				"instrument_parameters": {
 					"number_channels":		self.instrument.instrument_parameters.number_channels,
 				},
 			}
+			if self._include_serial:
+				content["serial"] =	self.instrument.serial
 		if self.channel_info is not None:
 			content["channel_info"] = self.channel_info
 		if self.acquisition_info is not None:
@@ -110,7 +113,7 @@ class OutputFile(object):
 		content["data"] = { }
 		for (name, raw_data) in self._raw_data.items():
 			raw_filename = filename + "_%s.%s" % (name, raw_data.file_format)
-			content["data"][name] = raw_data.to_repr(external_filename = raw_filename)
+			content["data"][name] = raw_data.to_repr(external_filename = os.path.basename(raw_filename))
 			with open(raw_filename, "wb") as f:
 				f.write(raw_data.data)
 		with open(filename + "_meta.json", "w") as f:

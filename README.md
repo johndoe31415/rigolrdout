@@ -28,7 +28,7 @@ For more information on how to useJust type `./rigolrdout --help`:
 ```
 $ ./rigolrdout --help
 usage: rigolrdout [-h] -c conn_str [-f {json,files}] [--comment comment]
-                  [--include-hardcopy] -o file [-v]
+                  [--include-hardcopy] [--no-serial] -o file [-v]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -42,6 +42,7 @@ optional arguments:
   --comment comment     Add comment to output metadata.
   --include-hardcopy    Include a hardcopy (screenshot) of the oscilloscope
                         screen in the result.
+  --no-serial           Do not include device's serial number in the metadata.
   -o file, --output file
                         Specify output filename. Mandatory argument.
   -v, --verbose         Increase level of debugging verbosity.

@@ -31,8 +31,8 @@
             "position": 1000000,
             "specific": {
                 "level": {
-                    "flt": 1.5,
-                    "orig": "1.500000e+00"
+                    "flt": 1.82,
+                    "orig": "1.820000e+00"
                 },
                 "slope": "POS",
                 "source": "CHAN1"
@@ -70,23 +70,24 @@
             "vernier": false
         }
     },
-    "comment": "Example with external files, -200us X-offset, -1.3V Y-offset",
+    "comment": "Example with inline format, -200us X-offset, -1.3V Y-offset",
     "connection": "tcpip:ds1000z",
-    "created": "2018-04-01T22:17:19Z",
+    "created": "2018-04-01T22:45:48Z",
     "data": {
         "hardcopy": {
-            "filename": "example/output_hardcopy.png",
+            "filename": "output_hardcopy.png",
             "format": "png",
-            "length": 36076,
+            "length": 35409,
             "meta": {
                 "color": true,
-                "invert": false
+                "invert": false,
+                "type": "hardcopy"
             },
-            "sha256": "4edc314b65d1a11d70d5a354c0acb6c16a5e2ada8fb01f6f9b6cffe13e0f22a2",
+            "sha256": "4f45aa2b75d6fed5759239ea823c1cd38cd5f25abbd93e3ddb2ec1cf2267d39a",
             "storage": "external"
         },
         "waveform-ch1": {
-            "filename": "example/output_waveform-ch1.bin",
+            "filename": "output_waveform-ch1.bin",
             "format": "bin",
             "length": 2400000,
             "meta": {
@@ -94,7 +95,8 @@
                 "count": 1,
                 "format": "BYTE",
                 "points": 2400000,
-                "type": "RAW",
+                "type": "waveform",
+                "waveform_type": "RAW",
                 "x_increment": {
                     "flt": 1e-09,
                     "orig": "1.000000e-09"
@@ -114,7 +116,7 @@
                 },
                 "y_reference": 96
             },
-            "sha256": "1e68844dc568dd7657bacb56f5210a8db9e215f9e157bc839f032ae039a01266",
+            "sha256": "8d0d7c931a43403f430d1bff8a05112026b709210708de759f2527684c8cd1b4",
             "storage": "external"
         }
     },
@@ -124,7 +126,6 @@
         "instrument_parameters": {
             "number_channels": 4
         },
-        "serial": "REDACTED",
         "vendor": "RIGOL TECHNOLOGIES"
     }
 }
