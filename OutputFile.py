@@ -21,27 +21,7 @@
 
 import datetime
 import json
-import base64
-
-class HardCopy(object):
-	def __init__(self, data, file_format):
-		self._data = bytes(data)
-		self._file_format = file_format
-
-	@property
-	def data(self):
-		return self._data
-
-	@property
-	def file_format(self):
-		return self._file_format
-
-	def to_dict(self):
-		return {
-			"length":	len(self._data),
-			"format":	self._file_format,
-			"data":		base64.b64encode(self._data).decode("ascii"),
-		}
+from TMCDataTypes import TMCJSONEncoder
 
 class OutputFile(object):
 	def __init__(self):
@@ -50,7 +30,7 @@ class OutputFile(object):
 		self._channel_info = None
 		self._acquisition_info = None
 		self._instrument = None
-		self._hardcopies = [ ]
+		self._raw_data = { }
 
 	@property
 	def connection(self):
@@ -84,8 +64,8 @@ class OutputFile(object):
 	def instrument(self, value):
 		self._instrument = value
 
-	def add_hardcopy(self, hardcopy):
-		self._hardcopies.append(hardcopy)
+	def add_raw_data(self, name, raw_data):
+		self._raw_data[name] = raw_data
 
 	def _metadata(self):
 		content = {
@@ -110,17 +90,20 @@ class OutputFile(object):
 
 	def _write_json(self, filename):
 		content = self._metadata()
-		content["hardcopies"] = [ hardcopy.to_dict() for hardcopy in self._hardcopies ]
+		content["data"] = self._raw_data
 		with open(filename, "w") as f:
-			print(json.dumps(content, sort_keys = True, indent = 4), file = f)
+			print(json.dumps(content, sort_keys = True, indent = 4, cls = TMCJSONEncoder), file = f)
 
 	def _write_files(self, filename):
 		content = self._metadata()
+		content["data"] = { }
+		for (name, raw_data) in self._raw_data.items():
+			raw_filename = filename + "_%s.%s" % (name, raw_data.file_format)
+			content["data"][name] = raw_data.to_repr(external_filename = raw_filename)
+			with open(raw_filename, "wb") as f:
+				f.write(raw_data.data)
 		with open(filename + "_meta.json", "w") as f:
-			print(json.dumps(content, sort_keys = True, indent = 4), file = f)
-		for (hcid, hardcopy) in enumerate(self._hardcopies, 1):
-			with open(filename + "_hardcopy%d.%s" % (hcid, hardcopy.file_format), "wb") as f:
-				f.write(hardcopy.data)
+			print(json.dumps(content, sort_keys = True, indent = 4, cls = TMCJSONEncoder), file = f)
 
 	def write(self, file_format, filename):
 		if file_format == "json":

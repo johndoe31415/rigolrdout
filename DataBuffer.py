@@ -29,6 +29,10 @@ class DataBuffer(object):
 		self._cond = threading.Condition()
 		self._buf = bytearray()
 
+	def dump(self):
+		with self._cond:
+			print(self._buf)
+
 	def put(self, data):
 		with self._cond:
 			self._buf += data

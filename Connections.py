@@ -28,6 +28,9 @@ class BaseConnection(object):
 	def __init__(self):
 		self.__buffer = DataBuffer()
 
+	def dump_buffer(self):
+		self.__buffer.dump()
+
 	def command(self, text, timeout = 1.0, wait_response = True):
 		data = (text + "\n").encode("utf-8")
 		self._write(data)
@@ -39,6 +42,9 @@ class BaseConnection(object):
 	def readline(self, codec = "utf-8", timeout = 1.0):
 		return self.__buffer.getline(codec = codec, timeout = timeout)
 
+	def get(self, length, timeout = 1.0):
+		return self.__buffer.get(length, timeout = timeout)
+
 	def get_tmc_data(self, timeout = 5.0):
 		header = self.__buffer.get(2)
 		assert(header[0] == ord("#"))
@@ -46,6 +52,12 @@ class BaseConnection(object):
 		data_length = self.__buffer.get(digit_count)
 		data_length = int(data_length.decode("ascii"))
 		data = self.__buffer.get(data_length, timeout = timeout)
+
+		# Yes, that's pretty stupid. But it sends a newline after binary,
+		# length-delimited data.
+		newline = self.__buffer.get(1)
+		assert(newline[0] == 10)
+
 		return data
 
 	def _put(self, data):
