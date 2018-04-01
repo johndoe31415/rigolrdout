@@ -22,14 +22,28 @@
 import collections
 
 class RigolDriver(object):
-	_IdentifyResult = collections.namedtuple("IdentifyResult", [ "vendor", "device", "serial", "fw_version" ])
+	_InstrumentParameters = collections.namedtuple("InstrumentParameters", [ "number_channels" ])
+	_KnownInstruments = {
+		("RIGOL TECHNOLOGIES", "DS1104Z"):	_InstrumentParameters(number_channels = 4),
+	}
+	_IdentifyResult = collections.namedtuple("IdentifyResult", [ "vendor", "device", "serial", "fw_version", "instrument_parameters" ])
 
 	def __init__(self, connection):
 		self._conn = connection
+		self._identification = self._identify()
 
-	def identify(self):
+	@property
+	def identification(self):
+		return self._identification
+
+	def _identify(self):
 		response = self._conn.command("*IDN?")
-		return self._IdentifyResult(*response.split(","))
+		(vendor, device, serial, fw_version) = response.split(",")
+		instrument_id = (vendor, device)
+		if instrument_id not in self._KnownInstruments:
+			raise Exception("Instrument '%s' not known currently, add to 'KnownInstruments' dictionary." % (str(instrument_id)))
+		instrument_parameters = self._KnownInstruments[instrument_id]
+		return self._IdentifyResult(vendor = vendor, device = device, serial = serial, fw_version = fw_version, instrument_parameters = instrument_parameters)
 
 	def data(self):
 		print(self._conn.command(":MEAS:RIS? CHAN1"))
