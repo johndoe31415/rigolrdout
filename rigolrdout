@@ -1,0 +1,50 @@
+#!/usr/bin/python3
+#	rigolrdout - Read data and screenshots from Rigol oscilloscopes
+#	Copyright (C) 2012-2018 Johannes Bauer
+#
+#	This file is part of rigolrdout.
+#
+#	rigolrdout is free software; you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation; this program is ONLY licensed under
+#	version 3 of the License, later versions are explicitly excluded.
+#
+#	rigolrdout is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#
+#	You should have received a copy of the GNU General Public License
+#	along with rigolrdout; if not, write to the Free Software
+#	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#	Johannes Bauer <JohannesBauer@gmx.de>
+
+import time
+import sys
+from FriendlyArgumentParser import FriendlyArgumentParser
+from Connections import Connection
+from RigolDriver import RigolDriver
+from StopWatch import StopWatch
+
+parser = FriendlyArgumentParser()
+parser.add_argument("-c", "--connect", metavar = "conn_str", type = str, required = True, help = "Specify where to connect to. Can be something like \"tcpip:192.168.1.4\". Currently the only supported driver is \"tcpip\". Mandatory argument.")
+parser.add_argument("-f", "--output-format", choices = [ "json", "files" ], help = "Specify output filetype. Mandatory argument.")
+parser.add_argument("-o", "--output", metavar = "file", type = str, required = True, help = "Specify output filename. Mandatory argument.")
+parser.add_argument("-v", "--verbose", action = "count", default = 0, help = "Increase level of debugging verbosity.")
+args = parser.parse_args(sys.argv[1:])
+print(args)
+
+conn = Connection.establish(args.connect)
+try:
+	oscilloscope = RigolDriver(conn)
+	print(oscilloscope.identify())
+	oscilloscope.stop()
+	with StopWatch("png", True):
+		data = oscilloscope.get_display_data(img_format = "png")
+	with open("out.png", "wb") as f:
+		f.write(data)
+	print(len(data))
+	time.sleep(0.1)
+finally:
+	conn.close()
