@@ -8,7 +8,8 @@ Using rigolrdout is very straightforward. To grab all data from the scope,
 simply type something like
 
 ```
-$ ./rigolrdout -c tcpip:ds1000z --include-hardcopy --comment "Example #1" --output-format=json -o output.json
+$ ./rigolrdout -c tcpip:ds1000z --include-hardcopy --comment "Example #1" \
+               --output-format=json -o output.json
 ```
 
 This will connect via TCP/IP to the hostname "ds1000z" (any IP address would
