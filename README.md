@@ -8,7 +8,8 @@ Just type `./rigolrdout --help`:
 
 ```
 $ ./rigolrdout --help
-usage: rigolrdout [-h] -c conn_str [-f {json,files}] -o file [-v]
+usage: rigolrdout [-h] -c conn_str [-f {json,files}] [--include-screengrab] -o
+                  file [-v]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -17,7 +18,10 @@ optional arguments:
                         "tcpip:192.168.1.4". Currently the only supported
                         driver is "tcpip". Mandatory argument.
   -f {json,files}, --output-format {json,files}
-                        Specify output filetype. Mandatory argument.
+                        Specify output filetype. Can be one of json, files,
+                        defaults to files.
+  --include-screengrab  Include a hardcopy of the oscilloscope screen in the
+                        result.
   -o file, --output file
                         Specify output filename. Mandatory argument.
   -v, --verbose         Increase level of debugging verbosity.
