@@ -48,6 +48,74 @@ optional arguments:
   -v, --verbose         Increase level of debugging verbosity.
 ```
 
+## Plotting
+The nicest data is useless if there isn't a way to manipulate it. For this, use
+`rigolplot`. It can either create PNG files from the contained hardcopy images
+or PNGs or Gnuplot render files from the waveform data. Example:
+
+```
+$ ./rigolplot example/inline.json inline.png
+```
+
+Will plot all waveforms to the given PNG file. More options are possible, of course:
+
+```
+$ ./rigolplot --width 1920 --height 1080 --smooth-waveform --x-unit u example/inline.json inline.png
+```
+
+Will render a 1920x1080 waveform plot with the X unit in µs. Here's an actual
+example rendered with rigolplot:
+
+```
+$ ./rigolplot --honor-offsets --x-unit u --smooth-waveform --width 800 --height 600 example/inline.json example/inline.pn
+```
+
+Renders this image:
+
+![Example Plot](https://raw.githubusercontent.com/johndoe31415/rigolrdout/master/example/inline.png)
+
+There's also a quite self-explanatory help page:
+
+```
+usage: rigolplot [-h] [-t {waveform,hardcopy}] [-f {png,gnuplot}] [-s path]
+                 [--width pixels] [--height pixels] [--x-unit {m,u,n}]
+                 [--y-unit {m,u,n}] [--smooth-waveform] [--honor-offsets] [-v]
+                 infile outfile
+
+positional arguments:
+  infile                The input JSON filename.
+  outfile               The outputfilename.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t {waveform,hardcopy}, --output-type {waveform,hardcopy}
+                        Specify output content. Can be one of waveform,
+                        hardcopy, defaults to waveform.
+  -f {png,gnuplot}, --output-format {png,gnuplot}
+                        Specify output filetype. Can be one of png, gnuplot,
+                        defaults to png.
+  -s path, --search-path path
+                        When searching for external references, usually the
+                        directory of the input file is looked at. This allows
+                        specifying a different directory.
+  --width pixels        Width when plotting a gnuplot graph, in pixels.
+                        Defaults to 1280.
+  --height pixels       Height when plotting a gnuplot graph, in pixels.
+                        Defaults to 960.
+  --x-unit {m,u,n}      Plot X axis with given unit (milli, micro, nano);
+                        choices are m, u, n, defaults to no SI-prefix.
+  --y-unit {m,u,n}      Plot Y axis with given unit (milli, micro, nano);
+                        choices are m, u, n, defaults to no SI-prefix.
+  --smooth-waveform     Apply cubic spline interpolation to waveform before
+                        plotting.
+  --honor-offsets       By default, waveforms are plotted with the actually
+                        measured values. If they have been shifted in X or Y
+                        direction in the oscilloscope, this will therefore not
+                        appear in the plot. This option causes these offsets
+                        to be honored and included in the final plot.
+  -v, --verbose         Increase level of debugging verbosity.
+```
+
 ## File format
 The file format is ridiculously easy to understand -- basically it's carrying
 all the raw information from the scope over to a JSON file. There's examples of
@@ -72,7 +140,7 @@ should comlpetely replace this little tool. Until it does, this project will
 stay here.
 
 ## Dependencies
-rigolrdout only needs Python3.
+rigolrdout only needs Python3 and Gnuplot.
 
 ## License
 GNU GPL-3.
