@@ -60,19 +60,32 @@ $ ./rigolplot example/inline.json inline.png
 Will plot all waveforms to the given PNG file. More options are possible, of course:
 
 ```
-$ ./rigolplot --width 1920 --height 1080 --smooth-waveform --x-unit u example/inline.json inline.png
+$ ./rigolplot --width 1920 --height 1080 --smooth-waveform --x-unit u \
+              example/inline.json inline.png
 ```
 
 Will render a 1920x1080 waveform plot with the X unit in µs. Here's an actual
 example rendered with rigolplot:
 
 ```
-$ ./rigolplot --honor-offsets --x-unit u --smooth-waveform --width 800 --height 600 example/inline.json example/inline.pn
+$ ./rigolplot --honor-offsets --x-unit u --smooth-waveform --width 800 --height 600 \
+              example/inline.json example/inline.png
 ```
 
 Renders this image:
 
 ![Example Plot](https://raw.githubusercontent.com/johndoe31415/rigolrdout/master/example/inline.png)
+
+If you want to extract the simultaneously captured hardcopy from the inline
+file, you can do so as well:
+
+```
+$ ./rigolplot -t hardcopy example/inline.json example/inline_hardcopy.png
+```
+
+This is what it looks like:
+
+![Example Hardcopy](https://raw.githubusercontent.com/johndoe31415/rigolrdout/master/example/inline_hardcopy.png)
 
 There's also a quite self-explanatory help page:
 
